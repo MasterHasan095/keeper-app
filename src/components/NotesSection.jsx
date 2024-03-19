@@ -1,20 +1,26 @@
 import React from "react";
-import notes from "../data/notes";
-import Note from './Note';
 
-function NotesSection() {
-  console.log(notes)
-  return <>{
+import Note from "./Note";
 
-    notes.map((note, index) => (
- 
-      <Note 
-      key={note.index}
-      title={note.title}
-      content={note.content}
-      />
-    ))
-  }</>;
+function NotesSection(props) {
+
+  function deleteNote(id) {
+    props.deleteNote(id)
+  }
+
+  return (
+    <>
+      {props.notes.map((note, index) => (
+        <Note
+          key={index}
+          id={index}
+          title={note.title}
+          content={note.content}
+          deleteNote={deleteNote}
+        />
+      ))}
+    </>
+  );
 }
 
 export default NotesSection;
