@@ -1,37 +1,65 @@
 import React, { useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import Fab from "@mui/material/Fab";
+import Zoom from "@mui/material/Zoom";
 
 function CreateArea(props) {
-    const [note, setNote] = useState({
-        title: "",
-        content: ""
-    })
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [note, setNote] = useState({
+    title: "",
+    content: "",
+  });
 
-    function handleChange(event){
-        const {name, value} = event.target;
+  function handleChange(event) {
+    const { name, value } = event.target;
 
-        setNote(prevValue => {
-            return {
-                ...prevValue,
-                [name]: value
-            }
-        })
-    }
+    setNote((prevNote) => {
+      return {
+        ...prevNote,
+        [name]: value,
+      };
+    });
+  }
 
-    function addNote(event){
-        props.addNote(note)
-        setNote({
-            title: "",
-            content: ""
-        });
-        event.preventDefault();
-    }
+  function submitNote(event) {
+    props.onAdd(note);
+    setNote({
+      title: "",
+      content: "",
+    });
+    event.preventDefault();
+  }
+  function expand(){
+    setIsExpanded(true)
+  }
 
   return (
     <div>
-      <form>
-        <input name="title" placeholder="Title" onChange={handleChange} value ={note.title}/>
-        <textarea name="content" placeholder="Take a note..." rows="3" value ={note.content} onChange={handleChange}/>
-        <button onClick={addNote}>Add</button>
+      <form className="create-note">
+        { isExpanded ? <input
+          name="title"
+          onChange={handleChange}
+          value={note.title}
+          placeholder="Title"
+        /> : null}
+        <textarea
+          name="content"
+          onChange={handleChange}
+          value={note.content}
+          placeholder="Take a note..."
+          rows= {isExpanded ? 3 : 1 }
+          onClick={expand}
+        />
+       {isExpanded? <Zoom in={true}>
+          <Fab
+            onClick={submitNote}
+            size="small"
+            color="secondary"
+            aria-label="add"
+          >
+            <AddIcon />
+          </Fab>
+        </Zoom> : null}
       </form>
     </div>
   );
